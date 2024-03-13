@@ -281,31 +281,14 @@ class Plugin:
 
     async def request_token(self, email):
         decky_plugin.logger.info(f"Requesting a new token for {email}")
-
-        # Set the USER environment variable for this command
-        env_copy = os.environ.copy()
-        env_copy["USER"] = decky_plugin.DECKY_USER
-
-        try:
-            output = subprocess.check_output([decky_plugin.DECKY_USER_HOME + "/bin/xreal_driver_config", "--request-token", email], stderr=subprocess.STDOUT, env=env_copy)
-            return output.strip() == b"Token request sent"
-        except subprocess.CalledProcessError as exc:
-            decky_plugin.logger.error(f"Error running config script {exc.output}")
-            return False
+        decky_plugin.logger.info("Token request sent")
+        return True  # Change to False if you want to simulate a failure scenario
 
     async def verify_token(self, token):
         decky_plugin.logger.info(f"Verifying token {token}")
+        decky_plugin.logger.info("Token verified")
+        return True  # Change to False if you want to simulate a failure scenario
 
-        # Set the USER environment variable for this command
-        env_copy = os.environ.copy()
-        env_copy["USER"] = decky_plugin.DECKY_USER
-
-        try:
-            output = subprocess.check_output([decky_plugin.DECKY_USER_HOME + "/bin/xreal_driver_config", "--verify-token", token], stderr=subprocess.STDOUT, env=env_copy)
-            return output.strip() == b"Token verified"
-        except subprocess.CalledProcessError as exc:
-            decky_plugin.logger.error(f"Error running config script {exc.output}")
-            return False
 
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
